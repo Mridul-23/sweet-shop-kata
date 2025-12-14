@@ -84,3 +84,20 @@ class SweetUpdateView(generics.UpdateAPIView):
 class SweetDeleteView(generics.DestroyAPIView):
     queryset = Sweet.objects.all()
     permission_classes = [IsAdminUser]
+
+
+class SweetSearchView(generics.ListAPIView):
+    serializer_class = SweetSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Sweet.objects.all()
+        name = self.request.query_params.get("name")
+        category = self.request.query_params.get("category")
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        if category:
+            queryset = queryset.filter(category__icontains=category)
+
+        return queryset
