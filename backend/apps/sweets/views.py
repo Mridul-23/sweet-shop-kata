@@ -67,3 +67,9 @@ class SweetRestockView(APIView):
             },
             status=status.HTTP_200_OK
         )
+
+
+class SweetListView(generics.ListAPIView):
+    queryset = Sweet.objects.all()
+    serializer_class = SweetSerializer
+    permission_classes = [IsAuthenticated]
