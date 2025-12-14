@@ -14,7 +14,6 @@ class SweetCreateView(generics.CreateAPIView):
   permission_classes = [IsAdminUser]
 
 
-
 class SweetPurchaseView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -32,5 +31,39 @@ class SweetPurchaseView(APIView):
 
         return Response(
             {"message": "Purchase successful", "quantity": sweet.quantity},
+            status=status.HTTP_200_OK
+        )
+
+
+class SweetRestockView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request, pk):
+        sweet = get_object_or_404(Sweet, pk=pk)
+
+        quantity = request.data.get("quantity", 0)
+
+        try:
+            quantity = int(quantity)
+        except (TypeError, ValueError):
+            return Response(
+                {"detail": "Invalid quantity"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if quantity <= 0:
+            return Response(
+                {"detail": "Quantity must be greater than zero"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        sweet.quantity += quantity
+        sweet.save()
+
+        return Response(
+            {
+                "message": "Restock successful",
+                "quantity": sweet.quantity,
+            },
             status=status.HTTP_200_OK
         )
