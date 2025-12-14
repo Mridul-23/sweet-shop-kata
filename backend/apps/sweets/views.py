@@ -73,3 +73,14 @@ class SweetListView(generics.ListAPIView):
     queryset = Sweet.objects.all()
     serializer_class = SweetSerializer
     permission_classes = [IsAuthenticated]
+
+
+class SweetUpdateView(generics.UpdateAPIView):
+    queryset = Sweet.objects.all()
+    serializer_class = SweetSerializer
+    permission_classes = [IsAdminUser]
+
+
+class SweetDeleteView(generics.DestroyAPIView):
+    queryset = Sweet.objects.all()
+    permission_classes = [IsAdminUser]
