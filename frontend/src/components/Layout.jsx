@@ -6,6 +6,7 @@ export default function Layout({ children }) {
       <nav className="bg-white shadow p-4 flex gap-4">
         <Link to="/" className="font-medium">Home</Link>
         <Link to="/auth" className="font-medium">Login</Link>
+        <Link to="/admin" className="font-medium">Admin</Link>
       </nav>
 
       <main className="p-6">

@@ -74,3 +74,43 @@ export async function searchSweets({ name = "", category = "" }) {
   if (!res.ok) throw new Error("Search failed");
   return res.json();
 }
+
+
+export async function addSweet(payload) {
+  const res = await fetch(`${API_BASE}/sweets/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) throw new Error("Failed to add sweet");
+  return res.json();
+}
+
+export async function restockSweet(id, quantity) {
+  const res = await fetch(`${API_BASE}/sweets/${id}/restock/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({ quantity }),
+  });
+
+  if (!res.ok) throw new Error("Failed to restock");
+  return res.json();
+}
+
+export async function deleteSweet(id) {
+  const res = await fetch(`${API_BASE}/sweets/${id}/delete/`, {
+    method: "DELETE",
+    headers: {
+      ...getAuthHeaders(),
+    },
+  });
+
+  if (!res.ok) throw new Error("Failed to delete sweet");
+}
