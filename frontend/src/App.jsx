@@ -1,14 +1,20 @@
-import React from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import Auth from "./pages/Auth";
 import './App.css'
 
 function App() {
   return (
-    <>
-      <div>
-        Sweet Shop Kata
-      </div>
-    </>
-  )
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
