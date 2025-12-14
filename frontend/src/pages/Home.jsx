@@ -1,16 +1,34 @@
 import { useEffect, useState } from "react";
-import { fetchSweets, purchaseSweet } from "../utils/api";
+import { fetchSweets, purchaseSweet, searchSweets } from "../utils/api";
 
 function Home() {
   const [sweets, setSweets] = useState([]);
   const [error, setError] = useState("");
+
+  const [searchName, setSearchName] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
+
+
+  async function handleSearch(e) {
+    e.preventDefault();
+    try {
+      const data = await searchSweets({
+        name: searchName,
+        category: searchCategory,
+      });
+      setSweets(data);
+    } catch {
+      setError("Search failed");
+    }
+  }
+
 
   async function loadSweets() {
     try {
       const data = await fetchSweets();
       setSweets(data);
     } catch {
-      setError("Failed to load sweets");
+      setError("Failed to load sweets, Try logging in");
     }
   }
 
@@ -29,6 +47,40 @@ function Home() {
 
   return (
     <div>
+      <form
+        onSubmit={handleSearch}
+        className="flex gap-2 mb-4 flex-wrap"
+      >
+        <input
+          className="border p-2 rounded"
+          placeholder="Search by name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+        />
+
+        <input
+          className="border p-2 rounded"
+          placeholder="Search by category"
+          value={searchCategory}
+          onChange={(e) => setSearchCategory(e.target.value)}
+        />
+
+        <button
+          type="submit"
+          className="bg-black text-white px-4 py-2 rounded"
+        >
+          Search
+        </button>
+
+        <button
+          type="button"
+          className="px-4 py-2 border rounded"
+          onClick={loadSweets}
+        >
+          Reset
+        </button>
+      </form>
+
       <h1 className="text-xl font-semibold mb-4">Available Sweets</h1>
 
       {error && <p className="text-red-500">{error}</p>}

@@ -55,3 +55,22 @@ export async function purchaseSweet(id) {
   if (!res.ok) throw new Error("Purchase failed");
   return res.json();
 }
+
+export async function searchSweets({ name = "", category = "" }) {
+  const params = new URLSearchParams();
+
+  if (name) params.append("name", name);
+  if (category) params.append("category", category);
+
+  const res = await fetch(
+    `${API_BASE}/sweets/search/?${params.toString()}`,
+    {
+      headers: {
+        ...getAuthHeaders(),
+      },
+    }
+  );
+
+  if (!res.ok) throw new Error("Search failed");
+  return res.json();
+}
